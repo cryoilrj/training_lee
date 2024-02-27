@@ -1,0 +1,67 @@
+---
+title: "Introduction to Quarto"
+format: html
+bibliography: references.bib
+---
+
+# Cool Data Visualization
+
+A simple demonstration of using Quarto to mix narrative and R code for data visualization.
+
+## Distribution of the **`mtcars`** Dataset
+
+Let's *visualize* the distribution of miles per gallon (mpg) in the `mtcars` dataset.
+
+-   Shopping list
+-   Item 1
+-   Item 2
+
+```{r}
+# Load necessary libraries
+library(ggplot2)
+library(plotly)
+
+# Create a histogram with ggplot2
+p <- ggplot(mtcars, aes(x = mpg)) + 
+     geom_histogram(binwidth = 1, fill = "lightgreen", color = "purple") +
+     theme_minimal() +
+     ggtitle("Distribution of Miles Per Gallon in mtcars Dataset")
+
+# Convert the ggplot object to a plotly object
+ggplotly(p)
+```
+
+```{r}
+x <- 4 * 8
+x
+hights_ft <- c(5.2, 6.0, 5.7)
+
+coef <- 3.14
+```
+
+```{r}
+# Define the parts of the string
+part1 <- "Ar"
+part2 <- "ct"
+part3 <- "ic"
+
+# Concatenate the parts to form the string "Arctic"
+arctic_string <- paste0(part1, part2, part3)
+
+# Print the result
+arctic_string
+```
+
+
+
+**Help -\> Cheat Sheets -\> R Markdown Cheat Sheet/Reference Guide**
+
+<a href="https://cryoilrj.me" target="_blank">Visit my website ❄️</a>
+
+Here is a sample paper: [@kufner2021]
+
+| Penguin | Walrus | Orca |
+|---------|--------|------|
+| 1       | 2      | 4    |
+| 4       | 5      | 2    |
+| 20      | 1      | 7    |

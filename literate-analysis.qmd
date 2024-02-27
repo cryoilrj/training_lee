@@ -1,0 +1,81 @@
+---
+title: "Mini Literate Analysis"
+format: html
+editor_options: 
+  chunk_output_type: console
+---
+
+## Introduction
+
+### About this data
+
+This data set contains North Pole Environmental Observatory Bottle Chemistry data. Data downloaded from <a href="https://arcticdata.io/catalog/view/doi:10.18739/A25T3FZ8X" target="_blank">Arctic Data Center</a>.
+
+### Set-up
+
+```{r}
+library(readr)
+```
+
+### Read in data
+
+```{r}
+bg_chem <- read_csv("data/BGchem2008data.csv") # Using relative path
+bg_chem_spec <- spec(bg_chem)
+bg_chem_spec
+```
+
+## Analysis
+
+### Calculate Summary Statistics
+
+```{r}
+## Prints the column names of my data frame
+colnames(bg_chem)
+## General structure of the data frame - shows class of each column
+str(bg_chem)
+## First 6 lines of the data frame
+head(bg_chem, 4)
+## Summary of each column of data
+summary(bg_chem)
+## Prints unique values in a column (in this case Date)
+unique(bg_chem$Date)
+```
+
+```{r}
+nitrate <- mean(bg_chem$NO3)
+nitrite <- mean(bg_chem$NO2)
+amm <- mean(bg_chem$NH4)
+phos <- mean(bg_chem$P)
+
+```
+
+### Calcualte the mean Redfield ratio (nitrogen: phosphate ratio)
+
+```{r}
+ratio <- (nitrate + nitrite + amm)/phos
+ratio
+```
+
+### Plot Ratio
+
+```{r}
+# #| echo: false
+# Create a plot with custom axis titles
+plot(bg_chem$P, bg_chem$NO2 + bg_chem$NO3 + bg_chem$NH4, 
+     xlab = "Phosphate Concentration",   # Label for the x-axis
+     ylab = "Sum of NO3, N, and Ammonium Concentrations" # Label for the y-axis
+)
+
+
+# Add a title with enhanced appearance
+title(main = "Concentration Relationships",
+      font.main = 4,        # Font style (4 is italic)
+      cex.main = 1.5)       # Size of the title text
+```
+
+## Conclusion
+
+<!-- This is a comment that does not show up in the rendered text -->
+
+The Redfield ratio is `r round(ratio)`
