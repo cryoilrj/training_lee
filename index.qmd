@@ -3,23 +3,31 @@ title: "GitHub Pages Example"
 format: html
 ---
 
-## Quarto
-
-Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
-
-## Running Code
-
-When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
+Here's a penguin:
 
 ```{r}
-1 + 1
+options(repos = c(CRAN = "https://cloud.r-project.org"))
+install.packages("ggplot2")
+
+library(ggplot2)
+
+# Penguin Body
+penguin_body <- data.frame(x = c(0, 0), y = c(0, 0))
+p <- ggplot(penguin_body, aes(x, y)) +
+  geom_point() +
+  annotate("path", 
+           x = c(1, 1.5, 2, 1.5, 1, 0.5, 0, 0.5, 1), 
+           y = c(0, 0.5, 1, 2, 3, 2, 1, 0.5, 0), 
+           colour = "black", size = 2, fill = "black") +
+  theme_void()
+
+# Eyes
+p <- p + annotate("point", x = 1.25, y = 2.25, colour = "white", size = 3)
+p <- p + annotate("point", x = 0.75, y = 2.25, colour = "white", size = 3)
+
+# Beak
+p <- p + annotate("segment", x = 1, xend = 1.5, y = 1.5, yend = 1.5, colour = "orange", size = 2)
+
+# Display the Penguin
+p
 ```
-
-You can add options to executable code like this 
-
-```{r}
-#| echo: false
-2 * 2
-```
-
-The `echo: false` option disables the printing of code (only output is displayed).
