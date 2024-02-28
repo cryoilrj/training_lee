@@ -1,33 +1,41 @@
 ---
-title: "GitHub Pages Example"
+title: "Arctic Data Center Data Science Training"
 format: html
 ---
 
-Here's a penguin:
+## Course Lessons
+- [Literate analysis](literate-analysis.html)
+- [Cleaning and Wrangling Data](cleannwrangle.html)
+- Data Visualization
+- Functions and Packages
+
+## Course Practice Session
+- Practice I
+- Practice II
+
+Here is a snowflake arm:
 
 ```{r}
-options(repos = c(CRAN = "https://cloud.r-project.org"))
-install.packages("ggplot2")
+#| echo: false
 
 library(ggplot2)
 
-# Penguin Body
-penguin_body <- data.frame(x = c(0, 0), y = c(0, 0))
-p <- ggplot(penguin_body, aes(x, y)) +
-  geom_point() +
-  annotate("path", 
-           x = c(1, 1.5, 2, 1.5, 1, 0.5, 0, 0.5, 1), 
-           y = c(0, 0.5, 1, 2, 3, 2, 1, 0.5, 0), 
-           colour = "black", size = 2, fill = "black") +
+# Function to create a single arm of the snowflake
+snowflake_arm <- function(angle = 0) {
+  tibble::tibble(
+    x = c(0, cos(angle), 0.9*cos(angle + pi/16), cos(angle), 0.9*cos(angle - pi/16), cos(angle)),
+    y = c(0, sin(angle), 0.9*sin(angle + pi/16), sin(angle), 0.9*sin(angle - pi/16), sin(angle))
+  )
+}
+
+# Create a data frame for the snowflake
+snowflake_df <- dplyr::bind_rows(
+  lapply(seq(0, 2*pi, length.out = 7)[-7], snowflake_arm)
+)
+
+# Plot the snowflake
+ggplot(snowflake_df, aes(x, y)) +
+  geom_path() +
+  coord_fixed() +
   theme_void()
-
-# Eyes
-p <- p + annotate("point", x = 1.25, y = 2.25, colour = "white", size = 3)
-p <- p + annotate("point", x = 0.75, y = 2.25, colour = "white", size = 3)
-
-# Beak
-p <- p + annotate("segment", x = 1, xend = 1.5, y = 1.5, yend = 1.5, colour = "orange", size = 2)
-
-# Display the Penguin
-p
 ```
