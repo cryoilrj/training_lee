@@ -1,0 +1,92 @@
+---
+title: "R Practice: Functions"
+format: html
+---
+
+# Set-up
+```{r}
+library(rvest)
+library(readr)
+library(dplyr)
+library(janitor)
+```
+
+## Load the species table
+```{r}
+webpage <- rvest::read_html("https://www.pwrc.usgs.gov/BBL/Bander_Portal/login/speclist.php")
+
+tbls <- rvest::html_nodes(webpage, "table") %>% 
+    rvest::html_table(fill = TRUE)
+
+species <- tbls[[1]] %>% 
+    janitor::clean_names() %>% 
+    select(alpha_code, common_name) %>% 
+    mutate(alpha_code = tolower(alpha_code))
+
+head(species, 3)
+```
+
+## Read from data folder in Rpoj
+```{r}
+nest_data <-  read_csv("data/Utqiagvik_nest_data.csv")
+
+predator_survey <- read_csv("data/Utqiagvik_predator_surveys.csv")
+
+egg_measures <- read_csv("data/Utqiagvik_egg_measurements.csv")
+
+## Explore data
+colnames(predator_survey)
+glimpse(predator_survey)
+unique(predator_survey$species)
+summary(predator_survey)
+```
+
+## Translate species code into common names
+```{r}
+predator_comm_names <- left_join(predator_survey,
+                                 species,
+                                 by = c("species" = "alpha_code"))
+print(predator_comm_names)
+```
+
+## Function to translate species code into common names
+```{r}
+#' Title
+#'
+#' @param df A data frame containing BBL species codes in column `species`
+#' @param species A data frame defining BBL species codes with columns `alpha_code` and `common_name`
+#'
+#' @return A data frame with original data df, plus the common name of species
+#' @export
+assign_species_name <- function(df, species){
+
+    # Perform the left join
+    return_df <- left_join(df, species, by = c("species" = "alpha_code"))
+
+    # Check for NA values in 'common_name' after join
+    if (any(is.na(return_df$common_name))) {
+        warning("There are NA values in the 'common_name' column after joining.")
+    }
+
+    return(return_df)
+}
+```
+
+## Clean names for each dataframe
+```{r}
+predator_clean <- assign_species_name(predator_survey, species) %>% 
+    select(year, site, date, common_name, count) %>% 
+    filter(!is.na(common_name))
+
+nest_location_clean <- assign_species_name(nest_data, species) %>% 
+    select(year, site, nestID, common_name, lat_corrected, long_corrected) %>% 
+    filter(!is.na(common_name))
+
+eggs_clean <- assign_species_name(egg_measures, species) %>% 
+    select(year, site, nestID, common_name, length, width) %>% 
+    filter(!is.na(common_name))
+
+predator_clean
+nest_location_clean
+eggs_clean
+```
