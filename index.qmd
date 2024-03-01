@@ -8,6 +8,7 @@ format: html
 - [Cleaning and Wrangling Data](cleannwrangle.html)
 - [Data Visualization](data-viz.html)
 - [Functions and Packages](r-practice-functions.html)
+- [Working with Geospatial Data](spatial-data.html)
 
 ## Course Practice Session
 - Practice I
