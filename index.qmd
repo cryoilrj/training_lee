@@ -7,7 +7,7 @@ format: html
 - [Literate analysis](literate-analysis.html)
 - [Cleaning and Wrangling Data](cleannwrangle.html)
 - [Data Visualization](data-viz.html)
-- Functions and Packages
+- [Functions and Packages](r-practice-functions.html)
 
 ## Course Practice Session
 - Practice I
